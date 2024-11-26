@@ -52,6 +52,9 @@ You can set up your server following [the server setup guide from Admincraft](ht
 
    `SECRET_KEY=your_secret_key_here`
 
+   Define minecraft container name for websocket, if it is not "minecraft":
+   `MC_NAME=YOUR_MINECRAFT_CONTAINER_NAME`
+
 2. **Build and run the Docker container:**
 
    `sudo docker-compose up --build`
