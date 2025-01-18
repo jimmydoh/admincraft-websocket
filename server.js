@@ -13,7 +13,7 @@ const PORT = 8080;
 const CERT_PATH = "./certs/server.crt"; // Public certificate path
 const KEY_PATH = "./certs/server.key"; // Private key path
 const MAX_MESSAGES_PER_SECOND = 5; // Rate limiting configuration
-
+const MC_NAME = process.env.MC_NAME || "minecraft";
 if (!SECRET_KEY) {
   throw new Error("SECRET_KEY is not defined in docker-compose.yml");
 }
@@ -67,7 +67,7 @@ function executeCommand(command) {
 // Restart server command
 function restartServer() {
   console.log("Restarting the Minecraft server...");
-  executeCommand("docker restart minecraft");
+  executeCommand("docker restart ${MC_NAME}");
 }
 
 // Validate and sanitize WebSocket messages to prevent command injection
@@ -123,7 +123,7 @@ wss.on("connection", (ws, request) => {
     return;
   }
 
-  const logProcess = spawn("docker", ["logs", "-f", "minecraft"]);
+  const logProcess = spawn("docker", ["logs", "-f", MC_NAME]);
 
   logProcess.stdout.on("data", (data) => {
     ws.send(data.toString());
@@ -168,7 +168,7 @@ wss.on("connection", (ws, request) => {
     if (msgString === "admincraft restart-server") {
       restartServer();
     } else {
-      executeCommand(`docker exec minecraft send-command ${msgString}`);
+      executeCommand(`docker exec ${MC_NAME} send-command ${msgString}`);
     }
   });
 
