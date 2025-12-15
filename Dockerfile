@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install && apt-get update && apt-get install -y docker.io 
+RUN npm install
 
 # Copy the rest of the application code
 COPY . .
